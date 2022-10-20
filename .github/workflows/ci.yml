@@ -1,0 +1,95 @@
+name: "CI"
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, edited, reopened]
+
+env:
+  LAB_DIR: lab
+
+jobs:
+  windows:
+    name: "Windows (MSVC + MSBuild)"
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install vcpkg dependencies
+        shell: cmd
+        run: |
+          cmd /C ".github\buildsteps\windows\install-dependencies.bat"
+      - name: Build
+        shell: cmd
+        run: |
+          cmd /C ".github\buildsteps\windows\build.bat"
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: lab${{ env.LAB_DIR }}-windows
+          retention-days: 21
+          path: |
+            ${{ env.LAB_DIR }}/build/x86_32/**/*.exe
+            ${{ env.LAB_DIR }}/build/x86_32/**/*.dll
+            ${{ env.LAB_DIR }}/build/x86_32/**/*.lib
+            ${{ env.LAB_DIR }}/build/x86_32/**/*.pdb
+            ${{ env.LAB_DIR }}/build/x86_64/**/*.exe
+            ${{ env.LAB_DIR }}/build/x86_64/**/*.dll
+            ${{ env.LAB_DIR }}/build/x86_64/**/*.lib
+            ${{ env.LAB_DIR }}/build/x86_64/**/*.pdb
+
+  linux:
+    name: "Ubuntu (GCC + Make)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install vcpkg dependencies
+        shell: bash
+        run: |
+          bash -c ".github/buildsteps/linux/install-dependencies.sh"
+      - name: Build
+        shell: bash
+        run: |
+          bash -c ".github/buildsteps/linux/build.sh"
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: lab${{ env.LAB_DIR }}-linux
+          retention-days: 21
+          path: |
+            ${{ env.LAB_DIR }}/build/debug/
+            ${{ env.LAB_DIR }}/build/release/
+
+  macos:
+    name: "macOS (Clang + Ninja)"
+    runs-on: macOS-12
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install ninja build tool
+        shell: bash
+        run: |
+          brew install ninja
+      - name: Install vcpkg dependencies
+        shell: bash
+        run: |
+          bash -c ".github/buildsteps/macos/install-dependencies.sh"
+      - name: Build
+        shell: bash
+        run: |
+          bash -c ".github/buildsteps/macos/build.sh"
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: lab${{ env.LAB_DIR }}-macos
+          retention-days: 21
+          path: |
+            ${{ env.LAB_DIR }}/build/debug/
+            ${{ env.LAB_DIR }}/build/release/
