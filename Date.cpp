@@ -34,6 +34,23 @@ Date:: Date(const Date& x)
 
 Date Date::operator+ (const int& x) const
 {
+  Date temp = *this;
+  temp += x;
+
+  return temp;
+}
+
+Date Date::operator- (const int& x) const
+{
+  Date temp = *this;
+  temp -= x;
+
+  return temp;
+}
+
+Date& Date::operator+= (const int& x) 
+{
+
   int days = day + x, months = month, years = year;
   
   for (; days > amount[months] + (isLeap(years) && months == 1); months = (months + 1) % 12)
@@ -44,11 +61,11 @@ Date Date::operator+ (const int& x) const
     }
     days -= amount[months] + (isLeap(years) && months == 1);
   }
-
-  return { days, months, years };
+  
+  return *this;
 }
 
-Date Date::operator- (const int& x) const
+Date& Date::operator-= (const int& x)
 {
   int days = day - x, months = month, years = year;
   
@@ -61,31 +78,17 @@ Date Date::operator- (const int& x) const
     days += amount[months] + (isLeap(years) && months == 1);
   }
 
-  return { days, (months + 1) % 12, years };
-}
-
-Date Date::operator+= (const int& x) 
-{
-  *this = *this + x;
-  
   return *this;
 }
 
-Date Date::operator-= (const int& x)
-{
-  *this = *this - x;
-
-  return *this;
-}
-
-Date Date::operator++ ()
+Date& Date::operator++ ()
 {
   *this += 1;
 
   return *this;
 }
 
-Date Date::operator++ (int)
+Date& Date::operator++ (int)
 {
   Date temp = *this;
 
@@ -94,14 +97,14 @@ Date Date::operator++ (int)
   return temp;
 }
 
-Date Date::operator-- ()
+Date& Date::operator-- ()
 {
   *this -= 1;
 
   return *this;
 }
 
-Date Date::operator-- (int)
+Date& Date::operator-- (int)
 {
   Date temp = *this;
 
