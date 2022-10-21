@@ -15,9 +15,9 @@ public:
   Date& operator+= (const int& x);
   Date& operator-= (const int& x);
   Date& operator++ ();
-  Date& operator++ (int);
+  Date operator++ (int);
   Date& operator-- ();
-  Date& operator-- (int);
+  Date operator-- (int);
   bool operator== (const Date& x) const;
   bool operator!= (const Date& x) const;
   bool operator< (const Date& x) const;

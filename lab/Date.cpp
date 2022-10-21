@@ -88,7 +88,7 @@ Date& Date::operator++ ()
   return *this;
 }
 
-Date& Date::operator++ (int)
+Date Date::operator++ (int)
 {
   Date temp = *this;
 
@@ -104,7 +104,7 @@ Date& Date::operator-- ()
   return *this;
 }
 
-Date& Date::operator-- (int)
+Date Date::operator-- (int)
 {
   Date temp = *this;
 
