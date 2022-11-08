@@ -1,33 +1,50 @@
+#include "Matrix.h"
 #include <iostream>
-#include "Date.h"
 
 int main()
 {
-  Date base;
-  Date string("31 12 2022");
-  Date date(1, 1, 2022);
+  Matrix base;
+  Matrix size(3, 4);
+  Matrix cnst(4, 3);
 
-  string += 1;
-  date -= 1;
-
-  Date leap(28, 2, 2024);
-  Date not_leap(28, 2, 2023);
+  for (int i = 0; i < 12; ++i)
+  {
+    size.data[i] = i;
+    // cnst.data[i] = i;
+  }
   
-  ++leap;
-  not_leap++;
-  leap--;
-  --not_leap;
+  std::cout << size;
+//   std::cout << cnst;
+  
+  for (int i = 0; i < 4; ++i)
+  {
+    for (int j = 0; j < 3; ++j)
+    {
+      cnst[i][j]++;
+    }
+  }
+  
+  std::cout << cnst;
+  
+  size *= cnst;
+  
+  std::cout << size;
+  
+  base[0][0] = 1;
+  base += 1;
+  
+  Matrix second = base;
+  base += second;
+  
+  base *= 0.5;
 
-  std::cout << (leap == not_leap) << '\n';
-  std::cout << (leap != not_leap) << '\n';
-  std::cout << (leap > not_leap) << '\n';
-  std::cout << (leap < not_leap) << '\n';
-
-  Date input;
-
-  std::cin >> input;
-
-  Date::PrintString(input);
-
-  return 0;
+  // std::cout << base;
+  
+  // std::cout << (base == second) << '\n';
+  // std::cout << (base != second) << '\n';
+  
+  Matrix input;
+  
+  // std::cin >> input;
+  // std::cout << input;
 }
