@@ -1,44 +1,36 @@
+#include <iostream>
 
 template <typename T>
 class Matrix
 {
-  public:
-    Matrix()
-      : height(2), width(2)
-    {
-    }
+public:
+  Matrix();
+  Matrix(const int &y, const int &x);
+  Matrix(const Matrix<T> &x);
 
-    Matrix(const int& y, const int& x)
-      : height(y), width(x)
-    {
-    }
+  Matrix<T> operator+ (const double &x) const;
+  Matrix<T> operator+ (const Matrix<T> &x) const;
+  Matrix<T> operator- (const double &x) const;
+  Matrix<T> operator- (const Matrix<T> &x) const;
+  Matrix<T> operator* (const double &x) const;
+  Matrix<T> operator* (const Matrix<T> &x) const;
+  const T* operator[] (const int &x) const;
+  T* operator[] (const int &x);
+  Matrix<T>& operator= (const Matrix<T> &x);
+  Matrix<T>& operator+= (const double &x);
+  Matrix<T>& operator+= (const Matrix<T> &x);
+  Matrix<T>& operator-= (const double &x);
+  Matrix<T>& operator-= (const Matrix<T> &x);
+  Matrix<T>& operator*= (const double &x);
+  Matrix<T>& operator*= (const Matrix<T> &x);
+  bool operator== (const Matrix<T>& x) const;
+  bool operator!= (const Matrix<T>& x) const;
+  friend std::istream& operator>> (std::istream& stream, Matrix<T>& x);
+  friend std::ostream& operator<< (std::ostream& stream, const Matrix<T>& x);
 
-    Matrix(const Matrix& m)
-      : height(m.height), width(m.width), data(m.data)
-    {
-    }
+  ~Matrix();
 
-    Matrix operator+ (const int& x) const;
-    Matrix operator+ (const Matrix& x) const;
-    Matrix operator- (const int& x) const;
-    Matrix operator- (const Matrix& x) const;
-    Matrix operator* (const int& x) const;
-    Matrix<double> operator* (const double& x) const;
-    Matrix operator* (const Matrix& x) const;
-    T* operator[] (const int& x) const;
-    Matrix operator= (const Matrix& x);
-    Matrix operator+= (const int& x); 
-    Matrix operator+= (const Matrix& x);
-    Matrix operator-= (const int& x);
-    Matrix operator-= (const Matrix& x);
-    Matrix operator*= (const int& x);
-    Matrix<double> operator*= (const double& x);
-    Matrix operator*= (const Matrix& x);
-    bool operator== (const Matrix& x) const;
-    bool operator!= (const Matrix& x) const;
-
-  private:
-    int height;
-    int width;
-    T* data = new T[height * width];
+public:
+  int height, width;
+  T* data;
 };
