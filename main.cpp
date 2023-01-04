@@ -1,33 +1,22 @@
-#include "Matrix.h"
+#include "MatrixIterator.h"
+
 #include <iostream>
 
 int main()
 {
-  Matrix<int> base;
-  Matrix<float> size(3, 4);
+  Matrix<float> check(3, 4);
 
   for (int i = 0; i < 12; ++i)
   {
-    size.data[i] = i;
+    check.data[i] = 1./(i + 1);
   }
   
-  std::cout << size;
-  
-  base[0][0] = 1;
-  base += 1;
-  
-  Matrix<int> second = base;
-  base += second;
-  
-  base *= 0.5;
+  std::cout << check;
 
-  std::cout << base;
-  
-  std::cout << (base == second) << '\n';
-  std::cout << (base != second) << '\n';
-  
-  Matrix<int> input;
-  
-  std::cin >> input;
-  std::cout << input;
+  MatrixIterator<float> iter(&check.data[0], &check);
+
+  for (iter.Start(); iter.Valid(); iter.Forward())
+  {
+    std::cout << iter.Item() << " ";
+  }
 }
