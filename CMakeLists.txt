@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
 project(BinaryRelation)
 set(CMAKE_CXX_STANDARD 20)
-add_executable(BinaryRelation main.cpp BinaryRelation.h BinaryRelationProperty.h)
+add_executable(BinaryRelation main.cpp BinaryRelation.h BinaryRelationProperty.h 
+            Antisymmetry.h Irreflexivity.h Reflexivity.h Symmetry.h Transitivity.h
+            Equivalence.h Preorder.h PartialOrder.h StrictPartialOrder.h)
 if (MSVC)
     target_compile_options(BinaryRelation
             PRIVATE /W4          # warnings level

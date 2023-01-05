@@ -1,6 +1,6 @@
-#include <iostream>
-
 #include "BinaryRelation.h"
+
+#include <iostream>
 
 int main() 
 {
