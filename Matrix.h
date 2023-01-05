@@ -4,73 +4,133 @@ template <typename T>
 class Matrix
 {
 public:
-  Matrix(): height(2), width(2)
-  {   
-    data = new T[height * width];
-  };
-  Matrix(const int &y, const int &x): height(y), width(x)
-  {
-    data = new T[height * width];
-  };
-  Matrix(const Matrix<T> &x): height(x.height), width(x.width), data(new T[height*width])
-  {
-    for(int i = 0; i < width * height; ++i) {
-      data[i] = x.data[i];
-    }
-  };
+  Matrix();
+  Matrix(const int &y, const int &x);
+  Matrix(const Matrix<T> &x);
 
-  Matrix<T> operator+ (const double &x) const
-  {
+  Matrix<T> operator+ (const double &x) const;
+  Matrix<T> operator+ (const Matrix<T> &x) const;
+  Matrix<T> operator- (const double &x) const;
+  Matrix<T> operator- (const Matrix<T> &x) const;
+  Matrix<T> operator* (const double &x) const;
+  Matrix<T> operator* (const Matrix<T> &x) const;
+  const T* operator[] (const int &x) const;
+  T* operator[] (const int &x);
+  Matrix<T>& operator= (const Matrix<T> &x);
+  Matrix<T>& operator+= (const double &x);
+  Matrix<T>& operator+= (const Matrix<T> &x);
+  Matrix<T>& operator-= (const double &x);
+  Matrix<T>& operator-= (const Matrix<T> &x);
+  Matrix<T>& operator*= (const double &x);
+  Matrix<T>& operator*= (const Matrix<T> &x);
+  bool operator== (const Matrix<T>& x) const;
+  bool operator!= (const Matrix<T>& x) const;
+  template <typename Tstream>
+  friend std::istream& operator>> (std::istream& stream, Matrix<Tstream>& x);
+  template <typename Tstream>
+  friend std::ostream& operator<< (std::ostream& stream, const Matrix<Tstream>& x);
+
+  ~Matrix();
+
+public:
+  int height, width;
+  T* data;
+};
+
+///////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+Matrix<T>:: Matrix()
+  : height(2), width(2)
+{
+  data = new T[height * width];
+}
+
+template <typename T>
+Matrix<T>:: Matrix(const int &y, const int &x)
+  : height(y), width(x)
+{
+  data = new T[height * width];
+}
+
+template <typename T>
+Matrix<T>:: Matrix(const Matrix<T> &x)
+  : height(x.height), width(x.width), data(new T[height*width])
+{
+  for(int i = 0; i < width * height; ++i) {
+    data[i] = x.data[i];
+  }
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator+(const double &x) const
+{
   Matrix<T> temp = *this;
   temp += x;
 
   return temp;
-  };
-  Matrix<T> operator+ (const Matrix<T> &x) const
-  {
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator+(const Matrix<T> &x) const
+{
   Matrix<T> temp = *this;
   temp += x;
 
   return temp;
-  };
-  Matrix<T> operator- (const double &x) const
-  {
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator-(const double &x) const
+{
   Matrix<T> temp = *this;
   temp -= x;
 
   return temp;
-  };
-  Matrix<T> operator- (const Matrix<T> &x) const
-  {
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator-(const Matrix<T> &x) const
+{
   Matrix<T> temp = *this;
   temp -= x;
 
   return temp;
-  };
-  Matrix<T> operator* (const double &x) const
-  {
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator*(const double &x) const
+{
   Matrix<T> temp = *this;
   temp *= x;
 
   return temp;
-  };
-  Matrix<T> operator* (const Matrix<T> &x) const
-  {
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator*(const Matrix<T> &x) const
+{
   Matrix<T> temp = *this;
   temp *= x;
 
   return temp;
-  };
-  const T* operator[] (const int &x) const
-  {
+}
+
+template <typename T>
+const T* Matrix<T>:: operator[](const int& x) const
+{
   return &data[x * width];
-  };
-  T* operator[] (const int &x)
-  {
+}
+
+template <typename T>
+T* Matrix<T>:: operator[](const int& x)
+{
   return &data[x * width];
-  };
-  Matrix<T>& operator= (const Matrix<T> &x)
-  {
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator= (const Matrix<T> &x)
+{
   if (&x == this)
   {
     return *this;
@@ -88,18 +148,22 @@ public:
   
   return *this;
   }
-  };
-  Matrix<T>& operator+= (const double &x)
-  {
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator+=(const double &x) 
+{
   for (int i = 0; i < height * width; ++i)
   {
     data[i] += x;
   }
 
   return *this;
-  };
-  Matrix<T>& operator+= (const Matrix<T> &x)
-  {
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator+=(const Matrix<T> &x) 
+{
   if (x.height != height || x.width != width)
   {
     throw "You cannot sum different-sized matrices!";
@@ -111,18 +175,22 @@ public:
   }
 
   return *this;
-  };
-  Matrix<T>& operator-= (const double &x)
-  {
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator-=(const double &x)
+{
   for (int i = 0; i < height * width; ++i)
   {
     data[i] -= x;
   }
 
   return *this;
-  };
-  Matrix<T>& operator-= (const Matrix<T> &x)
-  {
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator-=(const Matrix<T> &x)
+{
   if (x.height != height || x.width != width)
   {
     throw "You cannot substract different-sized matrices!";
@@ -134,18 +202,22 @@ public:
   }
 
   return *this;
-  };
-  Matrix<T>& operator*= (const double &x)
-  {
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator*=(const double &x)
+{
   for (int i = 0; i < height * width; ++i)
   {
     data[i] *= x;
   }
 
   return *this;
-  };
-  Matrix<T>& operator*= (const Matrix<T> &x)
-  {
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator*=(const Matrix<T> &x)
+{
   if (x.height != width)
   {
     throw "You cannot multiply different-sized matrices!";
@@ -170,9 +242,11 @@ public:
   width = x.width;
 
   return *this;
-  };
-  bool operator== (const Matrix<T>& x) const
-  {
+}
+
+template <typename T>
+bool Matrix<T>::operator== (const Matrix<T>& x) const
+{
   if (x.height != height || x.width != width)
   {
     return false;
@@ -187,25 +261,13 @@ public:
   }
 
   return true;
-  };
-  bool operator!= (const Matrix<T>& x) const
-  {
+}
+
+template <typename T>
+bool Matrix<T>::operator!= (const Matrix<T>& x) const
+{
   return !(*this == x);
-  };
-  template <typename Tstream>
-  friend std::istream& operator>> (std::istream& stream, Matrix<Tstream>& x);
-  template <typename Tstream>
-  friend std::ostream& operator<< (std::ostream& stream, const Matrix<Tstream>& x);
-
-  ~Matrix()
-  {
-  delete[] data;
-  };
-
-public:
-  int height, width;
-  T* data;
-};
+}
 
 template <typename Tstream>
 std::istream& operator>> (std::istream& stream, Matrix<Tstream>& x)
@@ -234,4 +296,10 @@ std::ostream& operator<< (std::ostream& stream, const Matrix<Tstream>& x)
   }
 
   return stream;
+}
+
+template <typename T>
+Matrix<T>:: ~Matrix()
+{
+  delete[] data;
 }
