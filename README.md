@@ -8,6 +8,6 @@
 - Возвращать текущее значение
 - Выполнять проверку на принадлежность
 
-Для компиляции всех файлов в директории в VSCode одновременно, можно добавить в "code-runner.executorMap": { "cpp": "cd $dir && clang++ -std=c++17 *.cpp -o $fileName -o $fileNameWithoutExt & $dir$fileNameWithoutExt", }
+Для компиляции всех файлов в директории в VSCode одновременно, можно добавить в "code-runner.executorMap": { "cpp": "cd $dir && clang++ -std=c++20 *.cpp -o $fileName -o $fileNameWithoutExt & $dir$fileNameWithoutExt", }
 
 Либо запускать с помощью CMake.

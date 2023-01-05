@@ -1,22 +1,41 @@
-#include "MatrixIterator.h"
-
 #include <iostream>
 
-int main()
+#include "BinaryRelation.h"
+
+int main(int argc, char *argv[]) 
 {
-  Matrix<float> check(3, 4);
+    RelationSet<int> rs{std::make_pair<int, int>(1, 1), std::make_pair<int, int>(1, 2), std::make_pair<int, int>(1, 3),
+                        std::make_pair<int, int>(2, 1), std::make_pair<int, int>(2, 2), std::make_pair<int, int>(2, 3),
+                        std::make_pair<int, int>(3, 1), std::make_pair<int, int>(3, 2), std::make_pair<int, int>(3, 3)};
 
-  for (int i = 0; i < 12; ++i)
-  {
-    check.data[i] = 1./(i + 1);
-  }
-  
-  std::cout << check;
+    try {
+        std::set<int> s{1, 2, 3, 4};
+        Preorder<int> preorder(rs, s);
+    } catch(std::runtime_error e) {
+        std::cout << e.what();
+    }
 
-  MatrixIterator<float> iter(&check.data[0], &check);
+    std::set<int> s{1, 2, 3};
 
-  for (iter.Start(); iter.Valid(); iter.Forward())
-  {
-    std::cout << iter.Item() << " ";
-  }
+    std::cout << "============================================" << "\n";
+
+    Preorder<int> preorder(rs, s);
+    std::cout << preorder;
+
+    std::cout << "============================================" << "\n";
+
+    Equivalence<int> equiv(s);
+    std::cout << equiv;
+
+    std::cout << "============================================" << "\n";
+
+    PartialOrder<int> part_order(s);
+    std::cout << part_order;
+
+    std::cout << "============================================" << "\n";
+
+    StrictPartialOrder<int> strict_order(s);
+    std::cout << strict_order;
+
+    return EXIT_SUCCESS;
 }
