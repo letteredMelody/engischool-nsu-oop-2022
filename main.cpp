@@ -2,7 +2,7 @@
 
 #include "BinaryRelation.h"
 
-int main(int argc, char *argv[]) 
+int main() 
 {
     RelationSet<int> rs{std::make_pair<int, int>(1, 1), std::make_pair<int, int>(1, 2), std::make_pair<int, int>(1, 3),
                         std::make_pair<int, int>(2, 1), std::make_pair<int, int>(2, 2), std::make_pair<int, int>(2, 3),
@@ -11,31 +11,26 @@ int main(int argc, char *argv[])
     try {
         std::set<int> s{1, 2, 3, 4};
         Preorder<int> preorder(rs, s);
-    } catch(std::runtime_error e) {
-        std::cout << e.what();
+    } catch(std::runtime_error error) {
+        std::cout << error.what();
     }
 
     std::set<int> s{1, 2, 3};
-
-    std::cout << "============================================" << "\n";
-
     Preorder<int> preorder(rs, s);
-    std::cout << preorder;
 
-    std::cout << "============================================" << "\n";
+    std::cout << "Preorder:\n" << preorder;
 
     Equivalence<int> equiv(s);
-    std::cout << equiv;
 
-    std::cout << "============================================" << "\n";
+    std::cout << "Equivalence:\n" << equiv;
 
     PartialOrder<int> part_order(s);
-    std::cout << part_order;
 
-    std::cout << "============================================" << "\n";
+    std::cout << "Partial order:\n" << part_order;
 
     StrictPartialOrder<int> strict_order(s);
-    std::cout << strict_order;
 
-    return EXIT_SUCCESS;
+    std::cout << "Strict partial order:\n" << strict_order;
+
+    return 0;
 }

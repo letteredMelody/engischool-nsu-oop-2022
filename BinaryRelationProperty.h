@@ -96,13 +96,11 @@ RelationSet<T> BinaryRelationProperty<T>::apply(RelationSet<T> pair_set, std::se
 template <typename T>
 bool Reflexivity<T>::satisfies(RelationSet<T> pair_set, std::set<T> set) const
 {
-  std::cout << "Reflexivity\t\tcalled\tsatisfies" << "\n";
-
-  for (T e : set)
+  // std::cout << "r satisfies\n";
+  for (T elem : set)
   {
-    if (pair_set.find(std::make_pair<T, T>(std::forward<T>(e), std::forward<T>(e))) == pair_set.end())
+    if (pair_set.find(std::make_pair<T, T>(std::forward<T>(elem), std::forward<T>(elem))) == pair_set.end())
     {
-      std::cout << "\t\tbroke on pair " << e << "R" << e << "\n";
       return false;
     }
   }
@@ -121,13 +119,11 @@ void Reflexivity<T>::reduce(RelationSet<T>& pair_set, std::set<T> set)
 template <typename T>
 bool Irreflexivity<T>::satisfies(RelationSet<T> pair_set, std::set<T> set) const
 {
-  std::cout << "Irreflexivity\t\tcalled\tsatisfies" << "\n";
-
-  for (T e : set)
+  // std::cout << "ir satisfies\n";
+  for (T elem : set)
   {
-    if (pair_set.find(std::make_pair<T, T>(std::forward<T>(e), std::forward<T>(e))) != pair_set.end())
+    if (pair_set.find(std::make_pair<T, T>(std::forward<T>(elem), std::forward<T>(elem))) != pair_set.end())
     {
-      std::cout << "\t\tbroke on pair " << e << "R" << e << "\n";
       return false;
     }
   }
@@ -138,13 +134,12 @@ bool Irreflexivity<T>::satisfies(RelationSet<T> pair_set, std::set<T> set) const
 template <typename T>
 void Irreflexivity<T>::reduce(RelationSet<T>& pair_set, std::set<T> set)
 {
-  std::cout << "Irreflexivity\t\tcalled\treduce" << "\n";
+  // std::cout << "ir reduce\n";
+  RelationSet<T> new_set = pair_set;
 
-  RelationSet<T> new_set(pair_set);
-
-  for (T e : set)
+  for (T elem : set)
   {
-    auto pair = std::make_pair<T, T>(std::forward<T>(e), std::forward<T>(e));
+    auto pair = std::make_pair<T, T>(std::forward<T>(elem), std::forward<T>(elem));
     if (pair_set.find(pair) != pair_set.end())
     {
       new_set.erase(pair);
@@ -159,9 +154,7 @@ void Irreflexivity<T>::reduce(RelationSet<T>& pair_set, std::set<T> set)
 template <typename T>
 bool Symmetry<T>::satisfies(RelationSet<T> pair_set, std::set<T> set) const
 {
-  std::cout << "Symmetry\t\tcalled\tsatisfies" << "\n";
-  // return true;
-
+  // std::cout << "s satisfies\n";
   for (auto l = set.begin(); l != set.end(); ++l)
   {
     for (auto r = l; r != set.end(); ++r)
@@ -170,7 +163,6 @@ bool Symmetry<T>::satisfies(RelationSet<T> pair_set, std::set<T> set) const
       if ((pair_set.find(std::make_pair<T, T>(std::forward<T>(lf), std::forward<T>(rf))) == pair_set.end())
           != (pair_set.find(std::make_pair<T, T>(std::forward<T>(rf), std::forward<T>(lf))) == pair_set.end()))
       {
-        std::cout << "\t\tbroke on pair " << lf << "R" << rf << "\n";
         return false;
       }
     }
@@ -183,8 +175,6 @@ template <typename T>
 void Symmetry<T>::reduce(RelationSet<T>& pair_set, std::set<T> set)
 {
   throw std::runtime_error("Can't create symmetric relation!\n");
-
-  // pair_set = RelationSet<T>();
 };
 
 // Antisymmetry
@@ -192,9 +182,7 @@ void Symmetry<T>::reduce(RelationSet<T>& pair_set, std::set<T> set)
 template <typename T>
 bool Antisymmetry<T>::satisfies(RelationSet<T> pair_set, std::set<T> set) const
 {
-  std::cout << "Antisymmetry\t\tcalled\tsatisfies" << "\n";
-  // return true;
-
+  // std::cout << "as satisfies\n";
   for (auto l = set.begin(); l != set.end(); ++l)
   {
     for (auto r = std::next(l, 1); r != set.end(); ++r)
@@ -203,7 +191,6 @@ bool Antisymmetry<T>::satisfies(RelationSet<T> pair_set, std::set<T> set) const
       if ((pair_set.find(std::make_pair<T, T>(std::forward<T>(lf), std::forward<T>(rf))) != pair_set.end())
           && (pair_set.find(std::make_pair<T, T>(std::forward<T>(rf), std::forward<T>(lf))) != pair_set.end()))
       {
-        std::cout << "\t\tbroke on pair " << lf << "R" << rf << "\n";
         return false;
       }
     }
@@ -214,15 +201,15 @@ bool Antisymmetry<T>::satisfies(RelationSet<T> pair_set, std::set<T> set) const
 
 template <typename T>
 void Antisymmetry<T>::reduce(RelationSet<T>& pair_set, std::set<T> set)
-{
-  std::cout << "Antisymmetry\t\tcalled\treduce" << "\n";
-  
+{ 
+  // std::cout << "as reduce\n";
   RelationSet<T> new_set;
 
   for (auto value : pair_set)
   {
-    auto [l, r] = value;
-    auto pair = std::make_pair<T, T>(std::forward<T>(r), std::forward<T>(l));
+    auto first = value.first, second = value.second;
+    // auto [first, second] = value;
+    auto pair = std::make_pair<T, T>(std::forward<T>(second), std::forward<T>(first));
     if (pair_set.find(pair) != pair_set.end()) 
     {
       if (new_set.find(value) == new_set.end()
@@ -241,30 +228,22 @@ void Antisymmetry<T>::reduce(RelationSet<T>& pair_set, std::set<T> set)
 template <typename T>
 bool Transitivity<T>::satisfies(RelationSet<T> pair_set, std::set<T> set) const
 {
-  std::cout << "Transitivity\t\tcalled\tsatisfies" << "\n";
-  // return true;
+  // std::cout << "t satisfies\n";
   for (auto x = pair_set.begin(); x != pair_set.end(); ++x)
   {
-    auto [xl, xr] = *x;
-
-    if (xl == xr) continue;
-
+    auto xf = (*x).first, xs = (*x).second;
+    if (xf == xs) continue;
     for (auto y = std::next(x, 1); y != pair_set.end(); ++y)
     {
-      auto [yl, yr] = *y;
-
-      if (yl == yr) continue;
-
-      if (xr == yl) {
-        if (pair_set.find(std::make_pair<T, T>(std::forward<T>(xl), std::forward<T>(yr))) == pair_set.end()) {
-          std::cout << "\t\tbroke on pair " << xl << "R" << yr << "\n";
+      auto yf = (*y).first, ys = (*y).second;
+      if (yf == ys) continue;
+      if (xs == yf) {
+        if (pair_set.find(std::make_pair<T, T>(std::forward<T>(xf), std::forward<T>(ys))) == pair_set.end()) {
           return false;
         }
       }
-      
-      if (yr == xl) {
-        if (pair_set.find(std::make_pair<T, T>(std::forward<T>(yl), std::forward<T>(xr))) == pair_set.end()) {
-          std::cout << "\t\tbroke on pair " << yl << "R" << xr << "\n";
+      if (ys == xf) {
+        if (pair_set.find(std::make_pair<T, T>(std::forward<T>(yf), std::forward<T>(xs))) == pair_set.end()) {
           return false;
         }
       }
@@ -278,6 +257,4 @@ template <typename T>
 void Transitivity<T>::reduce(RelationSet<T>& pair_set, std::set<T> set)
 {
   throw std::runtime_error("Can't create transitive relation!\n");
-
-  // pair_set = RelationSet<T>();
 };
